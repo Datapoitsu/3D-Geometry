@@ -61,4 +61,4 @@ def CreateCylinder(Segments,radius,height):
     f.close()
 
 if __name__ == "__main__":
-    CreateCylinder(10,3,3)
+    CreateCylinder(6,3,3)

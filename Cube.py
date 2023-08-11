@@ -28,7 +28,7 @@ def CreateCube(xMult,yMult,zMult):
         "f 7 5 8",       
     ]
     
-    f = open("cube.obj", "w")
+    f = open("Cube.obj", "w")
     for i in Vertexes:
         f.write(i + "\n")
     for k in Faces:
