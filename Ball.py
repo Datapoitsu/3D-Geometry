@@ -1,29 +1,36 @@
 ## -------------------- Ball Generator ------------------------- ##
 #Written By: Aarni Junkkala
-
 import math
 
-def CreateBall(Segments,Rings,Radius):
+def CreateBall(Segments = 16,Rings = 16,Radius = 1, PosX = 0, PosY = 0, PosZ = 0):
     #Rings are created with idea that single top vertex is considered to be a one ring,
     #and bottom single vertex isn't
     if Segments <= 2 or Rings <= 2:
         return False
     
+    #Rotation to radians
+    RotX = RotX * math.pi / 180
+    RotY = RotY * math.pi / 180
+    RotZ = RotZ * math.pi / 180
+    
+    print(RotX,RotY,RotZ)
+    
+    
     Vertexes = [
-        "v 0 " + str(Radius) + " 0"
+        "v " + str(PosX) + " " + str(Radius + PosY) + " " + str(PosZ)
     ]
 
-    #Distances between rings and segments.
-    RingDistance = Radius * 2 / Rings
+    #Distances between segments.
     AnglePerSeg = (math.pi * 2) / Segments
 
     #Vertexes for sides.
     for i in range(1,Rings):
         for k in range(Segments):
-            CenterDist = math.cos(math.asin(Radius - (i * RingDistance)))
-            Vertexes.append("v " + str(math.sin(AnglePerSeg * k) * CenterDist) + " " + str(Radius - i * RingDistance) + " " + str(math.cos(AnglePerSeg * k) * CenterDist))
+            CenterDist = math.cos(math.asin(math.cos((i/Rings)* math.pi))) * Radius
+            Vertexes.append("v " + str(math.sin(AnglePerSeg * k) * CenterDist + PosX) + " " + str(math.cos((i/Rings)* math.pi) * Radius + PosY) + " " + str(math.cos(AnglePerSeg * k) * CenterDist + PosZ))
     
-    Vertexes.append("v 0 " + str(-Radius) + " 0")
+    #Bottom Vertex
+    Vertexes.append("v " + str(PosX) + " " + str(-Radius + PosY) + " " + str(PosZ))
 
     #Faces
     Faces = []
@@ -41,7 +48,6 @@ def CreateBall(Segments,Rings,Radius):
     #Faces on bottom
     for i in range(Segments):
         Faces.append("f " + str(len(Vertexes)) + " " + str(len(Vertexes) - 1 - i) + " " + str(len(Vertexes) + (-i - 2) % Segments - Segments))
-        print(Faces[-1])
 
     #Writes to file
     f = open("Ball.obj", "w")
@@ -51,6 +57,7 @@ def CreateBall(Segments,Rings,Radius):
         f.write(k + "\n")
     
     f.close()
-
+    print("Ball created succesfully!")
+    
 if __name__ == "__main__":
-    CreateBall(64,64,1)
+    CreateBall(16,16,2)
